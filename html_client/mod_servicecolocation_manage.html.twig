@@ -1,0 +1,85 @@
+{% if order.status == 'active' %}
+<div class="card mb-4">
+    <div class="card-header py-3">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h5 class="mb-1">Manage Service</h5>
+                <span class="small text-secondary">Configure and manage your service</span>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ul class="nav nav-tabs mb-2">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#details">{{ 'Details'|trans }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#vpn-access">{{ 'VPN Credentials'|trans }}</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#control-panel">{{ 'Control Panel (NEW)'|trans }}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            {# Hosting details #}
+            <div class="tab-pane fade active show" role="tabpanel" id="details">
+                <table class="table table-striped table-bordered table-sm">
+                    <tbody>
+                        <tr>
+                            <td>{{ 'IP Address Subnet'|trans }}:</td>
+                            <td>
+                                {{ service.subnet}}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>{{ 'IPMI Controller Addresses'|trans }}:</td>
+                            <td>
+                                {% for row in service.oobm_ips|split("\n") %}
+                                    {{row}}<br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            {# VPN Access #}
+            <div class="tab-pane fade" role="tabpanel" id="vpn-access">
+                <h3>{{ 'Access the Wireguard VPN'|trans }}</h3>
+                <div class="bg-dark rounded p-2">
+                    <code class="text-light" id="wgConf">
+{% for row in service.vpn_config|split("\n") %}
+{{row}}<br>
+{% endfor %}
+                    </code>
+                </div>
+                <br>
+                {# Make <P> disclaimer for how to install wireguard #}
+                <p class="text-muted">To access the VPN you need the <a href="https://www.wireguard.com/">Wireguard Client</a> 
+                installed on your device. Luckily, its cross-platform and supported almost anywhere personal computing is. 
+                Please download it and create a new tunnel with the configuration above or you can copy it to your clipboard with the button below. For assistance please refer to <a href="https://www.youtube.com/watch?v=x2cfJmdsOb8">this video</a></p>
+                <button class="btn btn-primary" onclick="copyToClipboard()">Copy config to clipboard</a>
+            </div>
+
+            {# Control Panel Access #}
+            <div class="tab-pane fade" role="tabpanel" id="control-panel">
+                
+                {# Make <P> disclaimer for how to install wireguard #}
+                <p class="text-muted">Currently we are running a testflight of a new control panel powered by <a href="https://tenantos.com/">TennantOS</a>. To gain access please open a support ticket and ask staff for an account. Once you have obtained credentials you may login with the button below!</p>
+                <a class="btn btn-primary" href="https://tos-mgr.nixlabs.dev">Login to Control Panel</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block js %}
+<script type="text/javascript">
+function copyToClipboard() {
+    let elem = document.getElementById("wgConf");
+    let value = elem.innerText;
+
+    navigator.clipboard.writeText(value);
+}
+</script>
+{% endblock %}
+{% endif %}

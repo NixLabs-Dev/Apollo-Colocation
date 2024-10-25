@@ -1,0 +1,9 @@
+{
+  "id": "servicecolocation",
+  "type": "mod",
+  "name": "Colocation Service",
+  "description": "Allows for the sale of Colocation Services.",
+  "icon": "icon.svg",
+  "author": "NixLabs Networks",
+  "version": "0.0.4"
+}

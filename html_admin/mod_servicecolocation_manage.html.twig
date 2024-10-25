@@ -1,0 +1,43 @@
+<div class="help">
+    <h2>{{ order.title }} {{ 'management'|trans }}</h2>
+</div>
+
+{#
+    "plugin" variable contains partial name, ie: plugin_PLUGINNAME_manage.html
+    "service" variable contains product configuration + order form values as key value pairs
+#}
+
+{# include plugin #}
+
+<form method="post" action="{{ 'api/admin/servicecolocation/update'|link }}" class="save api-form" data-api-msg="Service updated">
+    <input type="hidden" name="CSRFToken" value="{{ CSRFToken }}"/>
+    <fieldset>
+
+        <div class="rowElem">
+            <label class="topLabel">Subnet:</label>
+                <div class="formBottom">
+                    <input name="config[subnet]" value="{{ service.subnet }}"/>
+                </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label class="topLabel">OOBM Server IP Addresses:</label>
+                <div class="formBottom">
+                    <textarea rows="2" name="config[oobm_ips]">{{ service.oobm_ips }}</textarea>
+                </div>
+            <div class="fix"></div>
+        </div>
+
+        <div class="rowElem">
+            <label class="topLabel">VPN Configuration File:</label>
+                <div class="formBottom">
+                    <textarea rows="2" name="config[vpn_config]">{{ service.vpn_config }}</textarea>
+                </div>
+            <div class="fix"></div>
+        </div>
+
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        <input type="submit" value="{{ 'Update'|trans }}" class="btn btn-primary submitForm">
+    </fieldset>
+</form>
